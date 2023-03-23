@@ -1,21 +1,3 @@
-import './css/styles.css';
-import Notiflix from 'notiflix';
-var debounce = require('lodash.debounce');
-// import {fetchCountries} from "./fetchCountries";
-
-const DEBOUNCE_DELAY = 300;
-const inputEl = document.querySelector('input#search-box');
-const countriesList = document.querySelector('.country-list');
-const countriesInfo = document.querySelector('.country-info');
-let inputValue = '';
-
-inputEl.addEventListener('input', debounce(searchCountries, DEBOUNCE_DELAY));
-function searchCountries(e) {
-  inputValue = inputEl.value.trim();
-  fetchCountries(inputValue);
-}
-
-
 
 function fetchCountries(name) {
     fetch(
@@ -60,16 +42,15 @@ function fetchCountries(name) {
           countriesList.innerHTML = '';
           countriesInfo.innerHTML = '';
         }
-
         if (data.status === 404) {
-            let error = new Error(data.statusText);
-                error.response = data;
-                throw error
+          Notiflix.Notify.failure('Oops, there is no country with that name');
+          countriesInfo.innerHTML = '';
         }
       })
       .catch(error => {
         console.log(error);
-        Notiflix.Notify.failure('Oops, there is no country with that name');
-        
       });
   };
+
+  export { fetchCountries };
+  
